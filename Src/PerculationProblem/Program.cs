@@ -1,4 +1,6 @@
-﻿namespace PerculationProblem
+﻿using Common;
+
+namespace PerculationProblem
 {
     class Program
     {

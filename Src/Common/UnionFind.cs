@@ -1,12 +1,16 @@
-class UnionFind
+﻿namespace Common;
+
+public class UnionFind
 {
     private int[] parent;
     private int[] rank;
+    private int count;
 
     public UnionFind(int size)
     {
         parent = new int[size];
         rank = new int[size];
+        count = size;
 
         for (int i = 0; i < size; i++)
         {
@@ -24,12 +28,15 @@ class UnionFind
         return parent[x];
     }
 
-    public void Union(int x, int y)
+    public bool Union(int x, int y)
     {
         int rootX = Find(x);
         int rootY = Find(y);
 
-        if (rootX == rootY) return;
+        if (rootX == rootY)
+        {
+            return false;
+        }
 
         if (rank[rootX] > rank[rootY])
         {
@@ -44,6 +51,10 @@ class UnionFind
             parent[rootY] = rootX;
             rank[rootX]++;
         }
-    }
-}
 
+        count--;
+        return true;
+    }
+
+    public int Count() => count;
+}
