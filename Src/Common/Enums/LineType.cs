@@ -1,0 +1,37 @@
+﻿namespace Common.Enums;
+
+public enum LineType
+{
+    None = 0,
+    Solid = 1,
+    Dashed = 2,
+    Dotted = 3,
+    Double = 4,
+    Circle = 5,
+    Square = 6,
+    Triangle = 7,
+    Star = 8,
+    Plus = 9,
+    Cross = 10,
+    Diamond = 11,
+    Arrow = 12,
+    Heart = 13,
+    Spade = 14,
+    Club = 15,
+    Clover = 16,
+    Lightning = 17,
+    Moon = 18,
+    Sun = 19,
+    Cloud = 20,
+    Rain = 21,
+    Snow = 22,
+    Wind = 23,
+    Tornado = 24,
+    Earth = 25,
+    Fire = 26,
+    Water = 27,
+    Air = 28,
+    Metal = 29,
+    Wood = 30,
+    Spirit = 31
+}

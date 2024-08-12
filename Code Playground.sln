@@ -8,8 +8,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerculationProblem", "Src\PerculationProblem\PerculationProblem.csproj", "{BCF4BCC1-5ADB-4E48-805F-ED9451B4044E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColorConverter", "Src\ColorConverter\ColorConverter.csproj", "{C0E7AA72-F15B-4E8D-950A-7A34361FC37B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{22F36579-77CF-460E-A828-3D17E8DAAABC} = {22F36579-77CF-460E-A828-3D17E8DAAABC}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DList", "src\DList\DList.csproj", "{CD140881-FE1C-4274-BA67-D9267F6D3DDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DList", "src\DList\DList.csproj", "{CD140881-FE1C-4274-BA67-D9267F6D3DDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Src\Common\Common.csproj", "{22F36579-77CF-460E-A828-3D17E8DAAABC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +38,10 @@ Global
 		{CD140881-FE1C-4274-BA67-D9267F6D3DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD140881-FE1C-4274-BA67-D9267F6D3DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD140881-FE1C-4274-BA67-D9267F6D3DDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F36579-77CF-460E-A828-3D17E8DAAABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F36579-77CF-460E-A828-3D17E8DAAABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F36579-77CF-460E-A828-3D17E8DAAABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F36579-77CF-460E-A828-3D17E8DAAABC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
