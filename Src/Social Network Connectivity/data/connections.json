@@ -1,0 +1,102 @@
+[
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320711
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320713
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320714
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320714
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320715
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320715
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320716
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320716
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320717
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320717
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320718
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320718
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320719
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320719
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320720
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320720
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320721
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320721
+  },
+  {
+    "User1Id": 1,
+    "User2Id": 0,
+    "Timestamp": 1717157320722
+  },
+  {
+    "User1Id": 0,
+    "User2Id": 1,
+    "Timestamp": 1717157320722
+  }
+]
