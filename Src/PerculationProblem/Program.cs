@@ -55,7 +55,6 @@
             }
         }
 
-
         static void MakeMatrixPercolateAndTest()
         {
             Random rand = new Random();
