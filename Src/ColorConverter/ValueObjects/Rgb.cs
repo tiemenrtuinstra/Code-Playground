@@ -1,6 +1,8 @@
-﻿namespace ColorConverter.ValueObjects;
+﻿using ColorConverter.Extensions;
 
-internal class Rgb : IValidatable
+namespace ColorConverter.ValueObjects;
+
+internal class Rgb : ColorBase
 {
     public enum ColorComponent
     {
@@ -22,7 +24,7 @@ internal class Rgb : IValidatable
 
     public override string ToString() => $"Red: {Red}, Green: {Green}, Blue: {Blue}";
 
-    public bool IsValid()
+    public override bool IsValid()
     {
         try
         {
@@ -36,7 +38,7 @@ internal class Rgb : IValidatable
 
     internal static Rgb EnterValues()
     {
-        Console.WriteLine("Enter RGB values (0-255)");
+        Console.WriteLine("Enter RGB values (0-255) ");
         int red = EnterComponentValue(ColorComponent.Red);
         int green = EnterComponentValue(ColorComponent.Green);
         int blue = EnterComponentValue(ColorComponent.Blue);
@@ -49,9 +51,10 @@ internal class Rgb : IValidatable
         int value;
         while (true)
         {
-            Console.WriteLine($"Enter the amount for {componentName}:");
+            Console.Write($"Enter the amount for {componentName}: (0 - 255)");
             if (int.TryParse(Console.ReadLine(), out value) && value >= 0 && value <= 255)
             {
+                Console.WriteLine();
                 break;
             }
             Console.Error.WriteLine("Value must be between 0 and 255.");
@@ -66,8 +69,8 @@ internal class Rgb : IValidatable
 
         Console.WriteLine("Converting RGB to CMYK...");
 
-        // Convert RGB to CMY
-        Console.WriteLine("Step 1: Convert RGB to CMY");
+        // InitialConvert RGB to CMY
+        Console.WriteLine("Step 1: InitialConvert RGB to CMY");
         double c = 1 - (Red / 255.0);
         double m = 1 - (Green / 255.0);
         double y = 1 - (Blue / 255.0);
@@ -87,15 +90,15 @@ internal class Rgb : IValidatable
         }
         else
         {
-            // Convert CMY to CMYK
-            Console.WriteLine("Step 3: Convert CMY to CMYK by adjusting C, M, Y based on K");
+            // InitialConvert CMY to CMYK
+            Console.WriteLine("Step 3: InitialConvert CMY to CMYK by adjusting C, M, Y based on K");
             c = (c - k) / (1 - k);
             m = (m - k) / (1 - k);
             y = (y - k) / (1 - k);
         }
 
-        // Convert to percentages
-        Console.WriteLine("Step 4: Convert the CMYK values to percentages");
+        // InitialConvert to percentages
+        Console.WriteLine("Step 4: InitialConvert the CMYK values to percentages");
         c *= 100;
         m *= 100;
         y *= 100;
@@ -107,7 +110,7 @@ internal class Rgb : IValidatable
 
     internal Hex ToHex()
     {
-        // Convert each RGB component to its hexadecimal representation
+        // InitialConvert each RGB component to its hexadecimal representation
         string hexRed = DecimalToHexadecimal(Red);
         string hexGreen = DecimalToHexadecimal(Green);
         string hexBlue = DecimalToHexadecimal(Blue);
@@ -129,7 +132,7 @@ internal class Rgb : IValidatable
         int highDigit = decimalValue / 16;
         int lowDigit = decimalValue % 16;
 
-        // Convert digits to their hexadecimal representation
+        // InitialConvert digits to their hexadecimal representation
         string hexDigits = "0123456789ABCDEF";
         char highChar = hexDigits[highDigit];
         char lowChar = hexDigits[lowDigit];
@@ -137,4 +140,3 @@ internal class Rgb : IValidatable
         return $"{highChar}{lowChar}";
     }
 }
-

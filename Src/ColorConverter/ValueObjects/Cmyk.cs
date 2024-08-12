@@ -1,6 +1,8 @@
-﻿namespace ColorConverter.ValueObjects;
+﻿using ColorConverter.Extensions;
 
-internal class Cmyk : IValidatable
+namespace ColorConverter.ValueObjects;
+
+internal class Cmyk : ColorBase
 {
     public enum ColorComponent
     {
@@ -25,7 +27,7 @@ internal class Cmyk : IValidatable
 
     public override string ToString() => $"Cyan: {Cyan}, Magenta: {Magenta}, Yellow: {Yellow}, Key (Black): {Key}";
 
-    public bool IsValid()
+    public override bool IsValid()
     {
         try
         {
@@ -55,9 +57,10 @@ internal class Cmyk : IValidatable
         double value;
         while (true)
         {
-            Console.WriteLine($"Enter the amount for {componentName}:");
+            Console.Write($"Enter the amount for {componentName}: (0 - 100) ");
             if (double.TryParse(Console.ReadLine(), out value) && value >= 0 && value <= 100)
             {
+                Console.WriteLine();
                 break; // Exit the loop if input is valid
             }
             Console.Error.WriteLine("Value must be between 0 and 100.");
@@ -77,13 +80,13 @@ internal class Cmyk : IValidatable
         this.Key /= 100.0;
         Console.WriteLine($"Normalized CMYK values: C={this.Cyan}, M={this.Magenta}, Y={this.Yellow}, K={this.Key}");
 
-        // Convert CMYK to CMY
+        // InitialConvert CMYK to CMY
         double cCmy = this.Cyan * (1 - this.Key) + this.Key;
         double mMgy = this.Magenta * (1 - this.Key) + this.Key;
         double yCmy = this.Yellow * (1 - this.Key) + this.Key;
         Console.WriteLine($"Converted to CMY: C={cCmy}, M={mMgy}, Y={yCmy}");
 
-        // Convert CMY to RGB
+        // InitialConvert CMY to RGB
         int r = (int)((1 - cCmy) * 255);
         int g = (int)((1 - mMgy) * 255);
         int b = (int)((1 - yCmy) * 255);
@@ -103,11 +106,11 @@ internal class Cmyk : IValidatable
     {
         Console.WriteLine($"Starting conversion from CMYK to HEX.");
 
-        Console.WriteLine($"Conver to RGB");
+        Console.WriteLine($"InitialConvert to RGB");
         Rgb rgb = ToRgb();
         Console.WriteLine($"Converted to RGB: R={rgb.Red}, G={rgb.Green}, B={rgb.Blue}");
 
-        Console.WriteLine($"Convert to HEX");
+        Console.WriteLine($"InitialConvert to HEX");
         Hex hex = rgb.ToHex();
 
         if (!hex.IsValid())

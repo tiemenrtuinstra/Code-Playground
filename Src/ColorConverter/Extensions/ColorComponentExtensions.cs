@@ -1,4 +1,4 @@
-﻿namespace ColorConverter.ValueObjects;
+﻿namespace ColorConverter.Extensions;
 
 public static class ColorComponentExtensions
 {

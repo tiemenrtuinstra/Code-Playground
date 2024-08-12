@@ -1,36 +1,27 @@
 ﻿using ColorConverter.Enums;
 using ColorConverter.Extensions;
 using ColorConverter.ValueObjects;
+using Common.Extensions;
+using System.Text;
 
 namespace ColorConverter;
 
-internal struct ConversionOperation
-{
-    public Func<IValidatable> ConversionFunc;
-    public Action<IValidatable> PrintFunc;
-    public ColorOption ColorOption;
-
-    public ConversionOperation(Func<IValidatable> conversionFunc,
-        Action<IValidatable> printFunc, ColorOption colorOption)
-    {
-        ConversionFunc = conversionFunc;
-        PrintFunc = printFunc;
-        ColorOption = colorOption;
-    }
-}
-
 internal class Program
 {
+    private static ColorOption chosenFromColor;
+    private static ColorOption chosenToColor;
+    private static IValidatable currentColor;
+    private static readonly string appTitle = "Colou Converter";
+    private static readonly string appConsoleTitle = "\r\n ██████╗ ██████╗ ██╗      ██████╗ ██╗   ██╗██████╗      ██████╗ ██████╗ ███╗   ██╗██╗   ██╗███████╗██████╗ ████████╗███████╗██████╗ \r\n██╔════╝██╔═══██╗██║     ██╔═══██╗██║   ██║██╔══██╗    ██╔════╝██╔═══██╗████╗  ██║██║   ██║██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗\r\n██║     ██║   ██║██║     ██║   ██║██║   ██║██████╔╝    ██║     ██║   ██║██╔██╗ ██║██║   ██║█████╗  ██████╔╝   ██║   █████╗  ██████╔╝\r\n██║     ██║   ██║██║     ██║   ██║██║   ██║██╔══██╗    ██║     ██║   ██║██║╚██╗██║╚██╗ ██╔╝██╔══╝  ██╔══██╗   ██║   ██╔══╝  ██╔══██╗\r\n╚██████╗╚██████╔╝███████╗╚██████╔╝╚██████╔╝██║  ██║    ╚██████╗╚██████╔╝██║ ╚████║ ╚████╔╝ ███████╗██║  ██║   ██║   ███████╗██║  ██║\r\n ╚═════╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝\r\n                                                                                                                                    \r\n";
+    private static readonly string appDescription = "This program converts colors between HEX, RGB, and CMYK formats.";
+
     internal static void Main()
     {
         try
         {
-            Console.Title = "Colour Converter";
-            string text = "\r\n ██████╗ ██████╗ ██╗      ██████╗ ██╗   ██╗██████╗      ██████╗ ██████╗ ███╗   ██╗██╗   ██╗███████╗██████╗ ████████╗███████╗██████╗ \r\n██╔════╝██╔═══██╗██║     ██╔═══██╗██║   ██║██╔══██╗    ██╔════╝██╔═══██╗████╗  ██║██║   ██║██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗\r\n██║     ██║   ██║██║     ██║   ██║██║   ██║██████╔╝    ██║     ██║   ██║██╔██╗ ██║██║   ██║█████╗  ██████╔╝   ██║   █████╗  ██████╔╝\r\n██║     ██║   ██║██║     ██║   ██║██║   ██║██╔══██╗    ██║     ██║   ██║██║╚██╗██║╚██╗ ██╔╝██╔══╝  ██╔══██╗   ██║   ██╔══╝  ██╔══██╗\r\n╚██████╗╚██████╔╝███████╗╚██████╔╝╚██████╔╝██║  ██║    ╚██████╗╚██████╔╝██║ ╚████║ ╚████╔╝ ███████╗██║  ██║   ██║   ███████╗██║  ██║\r\n ╚═════╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝\r\n                                                                                                                                    \r\n";
+            ColorConsoleExtensions.StartProgram(appTitle,appConsoleTitle, appDescription);
 
-            ConsoleExtensions.PrintColoredText(text);
-
-            Convert();
+            InitialConvert();
 
             ConsoleExtensions.EndProgram();
         }
@@ -40,194 +31,106 @@ internal class Program
         }
     }
 
-    internal static void Convert()
+
+    internal static void InitialConvert()
     {
         Console.WriteLine(); // Move to the next line
 
-        Console.WriteLine("What type do you want to convert: (1) HEX, (2) RGB, (3) YMCK");
-        ConsoleExtensions.PrintLine();
-
+        Console.Write("What type do you want to convert: (1) HEX, (2) RGB, (3) CMYK ");
         char inputChar = Console.ReadKey().KeyChar;
+        Console.WriteLine();
+        ColorConsoleExtensions.PrintRandomColorLine();
+
         if (int.TryParse(inputChar.ToString(), out int inputNumber) && Enum.IsDefined(typeof(ColorOption), inputNumber))
         {
-            ColorOption selectedOption = (ColorOption)inputNumber;
-            switch (selectedOption)
-            {
-                case ColorOption.HEX:
-                    ConvertHex();
-                    break;
-                case ColorOption.RGB:
-                    ConvertRgb();
-                    break;
-                case ColorOption.CMYK:
-                    ConvertCmyk();
-                    break;
-                default:
-                    Console.Error.WriteLine("Invalid input");
-                    Convert();
-                    break;
-            }
-        }
-        else
-        {
-            Console.Error.WriteLine("Invalid input");
+            chosenFromColor = (ColorOption)inputNumber;
+            currentColor = null; // Reset current color
             Convert();
         }
+        else
+        {
+            Console.Error.WriteLine("Invalid input");
+            InitialConvert();
+        }
     }
 
-    internal static void ConvertCmyk()
+    private static void Convert()
     {
-        Cmyk cmyk = Cmyk.EnterValues();
-        if (!cmyk.IsValid())
+        var conversionMap = new Dictionary<ColorOption, Action>
         {
-            Console.Error.WriteLine("Invalid CMYK values.");
-            return;
-        }
-
-        Console.WriteLine("Convert CMYK to: (1) HEX, (2) RGB");
-        ConsoleExtensions.PrintLine();
-
-        char inputChar = Console.ReadKey().KeyChar;
-        if (int.TryParse(inputChar.ToString(), out int inputNumber))
-        {
-            if (Enum.IsDefined(typeof(ColorOption), inputNumber))
             {
-                ColorOption selectedOption = (ColorOption)inputNumber;
-                switch (selectedOption)
+                ColorOption.HEX, () => ConvertColor<Hex>(Hex.EnterValues, new Dictionary<ColorOption, Func<Hex, IValidatable>>
                 {
-                    case ColorOption.HEX:
-                        TryPrintConversion<Hex>(cmyk.ToHex, ConsoleExtensions.PrintHex, ColorOption.HEX);
-                        break;
-                    case ColorOption.RGB:
-                        TryPrintConversion<Rgb>(cmyk.ToRgb, ConsoleExtensions.PrintRgb, ColorOption.RGB);
-                        break;
-                    default:
-                        Console.Error.WriteLine("Invalid option");
-                        ConvertCmyk(); // Retry conversion
-                        break;
-                }
-            }
-            else
+                    { ColorOption.RGB, hex => hex.ToRgb() },
+                    { ColorOption.CMYK, hex => hex.ToCmyk() }
+                })
+            },
             {
-                Console.Error.WriteLine("Invalid enum value");
-                ConvertCmyk(); // Retry conversion
+                ColorOption.RGB, () => ConvertColor<Rgb>(Rgb.EnterValues, new Dictionary<ColorOption, Func<Rgb, IValidatable>>
+                {
+                    { ColorOption.HEX, rgb => rgb.ToHex() },
+                    { ColorOption.CMYK, rgb => rgb.ToCmyk() }
+                })
+            },
+            {
+                ColorOption.CMYK, () => ConvertColor<Cmyk>(Cmyk.EnterValues, new Dictionary<ColorOption, Func<Cmyk, IValidatable>>
+                {
+                    { ColorOption.HEX, cmyk => cmyk.ToHex() },
+                    { ColorOption.RGB, cmyk => cmyk.ToRgb() }
+                })
             }
+        };
+
+        if (conversionMap.TryGetValue(chosenFromColor, out var convertAction))
+        {
+            convertAction();
         }
         else
         {
             Console.Error.WriteLine("Invalid input");
-            ConvertCmyk(); // Retry conversion
+            InitialConvert();
         }
     }
 
-    internal static void ConvertRgb()
+    internal static void ConvertColor<T>(Func<T> enterValuesFunc, Dictionary<ColorOption, Func<T, IValidatable>> conversionOptions) where T : IValidatable
     {
-        Rgb rgb = Rgb.EnterValues();
-        if (!rgb.IsValid())
+        if (currentColor == null)
         {
-            Console.Error.WriteLine("Invalid RGB values.");
-            return;
+            currentColor = enterValuesFunc();
+            if (!currentColor.IsValid())
+            {
+                Console.Error.WriteLine($"Invalid {typeof(T).Name} values.");
+                return;
+            }
         }
 
-        Console.WriteLine("Convert RGB to: (1) HEX, (2) CMYK");
-        ConsoleExtensions.PrintLine();
+        Console.Write($"Convert {typeof(T).Name} to: {string.Join(", ", conversionOptions.Keys.Select(k => $"({(int)k}) {k}"))}");
+        ColorConsoleExtensions.PrintRandomColorLine();
 
         char inputChar = Console.ReadKey().KeyChar;
-        if (int.TryParse(inputChar.ToString(), out int inputNumber))
+        Console.WriteLine();
+        if (int.TryParse(inputChar.ToString(), out int inputNumber) && conversionOptions.ContainsKey((ColorOption)inputNumber))
         {
-            inputNumber = inputNumber == 2 ? 3 : inputNumber; //remap the value to match the enum
-
-            if (Enum.IsDefined(typeof(ColorOption), inputNumber))
-            {
-                ColorOption selectedOption = (ColorOption)inputNumber;
-                switch (selectedOption)
-                {
-                    case ColorOption.HEX:
-                        TryPrintConversion(rgb.ToHex, ConsoleExtensions.PrintHex, ColorOption.RGB);
-                        break;
-                    case ColorOption.CMYK:
-                        TryPrintConversion(rgb.ToCmyk, ConsoleExtensions.PrintCmyk, ColorOption.CMYK);
-                        break;
-                    default:
-                        Console.Error.WriteLine("Invalid option");
-                        ConvertRgb(); // Retry conversion
-                        break;
-                }
-            }
-            else
-            {
-                Console.Error.WriteLine("Invalid enum value");
-                ConvertRgb(); // Retry conversion
-            }
+            chosenToColor = (ColorOption)inputNumber;
+            TryPrintConversion(() => conversionOptions[chosenToColor]((T)currentColor), chosenToColor);
         }
         else
         {
             Console.Error.WriteLine("Invalid input");
-            ConvertRgb(); // Retry conversion
-        }
-    }
-
-    internal static void ConvertHex()
-    {
-        Hex hex = Hex.EnterValue();
-        if (!hex.IsValid())
-        {
-            Console.Error.WriteLine("Invalid HEX value.");
-            return;
-        }
-
-        Console.WriteLine("Convert HEX to: (1) RGB, (2) CMYK");
-        ConsoleExtensions.PrintLine();
-
-        char inputChar = Console.ReadKey().KeyChar;
-        if (int.TryParse(inputChar.ToString(), out int inputNumber))
-        {
-            inputNumber = inputNumber == 2 ? 3 : inputNumber; //remap the value to match the enum
-            inputNumber = inputNumber == 1 ? 2 : inputNumber; //remap the value to match the enum
-
-            if (Enum.IsDefined(typeof(ColorOption), inputNumber))
-            {
-                ColorOption selectedOption = (ColorOption)inputNumber;
-                switch (selectedOption)
-                {
-                    case ColorOption.HEX:
-                        Console.WriteLine("HEX value: " + hex.ToString());
-                        break;
-                    case ColorOption.RGB:
-                        TryPrintConversion(hex.ToRgb, ConsoleExtensions.PrintRgb, ColorOption.RGB);
-                        break;
-                    case ColorOption.CMYK:
-                        TryPrintConversion(hex.ToCmyk, ConsoleExtensions.PrintCmyk, ColorOption.CMYK);
-                        break;
-                    default:
-                        Console.Error.WriteLine("Invalid option");
-                        ConvertHex(); // Retry conversion
-                        break;
-                }
-            }
-            else
-            {
-                Console.Error.WriteLine("Invalid enum value");
-                ConvertHex(); // Retry conversion
-            }
-        }
-        else
-        {
-            Console.Error.WriteLine("Invalid input");
-            ConvertHex(); // Retry conversion
+            ConvertColor(enterValuesFunc, conversionOptions); // Retry conversion
         }
 
         AnotherConversion();
     }
 
     // Generic method to handle conversion and printing
-    internal static void TryPrintConversion<T>(Func<T> conversionFunc, Action<T> printFunc, ColorOption conversionType) where T : IValidatable
+    internal static void TryPrintConversion<T>(Func<T> conversionFunc, ColorOption conversionType) where T : IValidatable
     {
         T result = conversionFunc();
         if (result.IsValid())
         {
             Console.WriteLine($"This is the {conversionType} color:");
-            printFunc(result);
+            ColorConsoleExtensions.PrintColor(result);
         }
         else
         {
@@ -235,18 +138,27 @@ internal class Program
         }
     }
 
-
     internal static void AnotherConversion()
     {
-        Console.WriteLine("Do you want to do another conversion? (Y/N)");
+        Console.Write("Do you want to convert the color to another format? (Y/N) ");
         if (char.ToLower(Console.ReadKey().KeyChar) == 'y')
         {
+            Console.WriteLine();
             Convert();
         }
         else
         {
-            ConsoleExtensions.EndProgram();
+            Console.WriteLine();
+            Console.Write("Do you want to do another conversion? (Y/N) ");
+            if (char.ToLower(Console.ReadKey().KeyChar) == 'y')
+            {
+                Console.WriteLine();
+                InitialConvert();
+            }
+            else
+            {
+                ConsoleExtensions.EndProgram();
+            }
         }
     }
-
 }

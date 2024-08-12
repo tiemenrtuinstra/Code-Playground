@@ -2,7 +2,7 @@
 
 namespace ColorConverter.ValueObjects;
 
-internal class Hex : IValidatable
+internal class Hex : ColorBase
 {
     internal string Value { get; set; }
 
@@ -16,7 +16,7 @@ internal class Hex : IValidatable
         return Value;
     }
 
-    public bool IsValid()
+    public override bool IsValid()
     {
         try
         {
@@ -28,15 +28,16 @@ internal class Hex : IValidatable
         }
     }
 
-    internal static Hex EnterValue()
+    internal static Hex EnterValues()
     {
-        Console.WriteLine("Enter HEX value: ");
+        Console.Write("Enter HEX value: (00-FF) ");
         string input = Console.ReadLine();
+        Console.WriteLine();
         var hex = new Hex(input);
         if (!hex.IsValid())
         {
             Console.Error.WriteLine("Invalid HEX value.");
-            return EnterValue();
+            return EnterValues();
         }
         return hex;
     }
@@ -54,40 +55,41 @@ internal class Hex : IValidatable
     internal Cmyk ToCmyk()
     {
         Console.WriteLine("Starting HEX to CMYK conversion...");
-        ConsoleExtensions.PrintLine();
+        ColorConsoleExtensions.PrintRandomColorLine();
 
-        // Convert HEX to RGB
-
+        // InitialConvert HEX to RGB
         Console.WriteLine($"HEX value: {Value}");
-        ConsoleExtensions.PrintLine();
+        ColorConsoleExtensions.PrintRandomColorLine();
         int red = HexPairToDecimal(Value.Substring(0, 2));
         int green = HexPairToDecimal(Value.Substring(2, 2));
         int blue = HexPairToDecimal(Value.Substring(4, 2));
 
         Console.WriteLine($"RGB values - Red: {red}, Green: {green}, Blue: {blue}");
-        ConsoleExtensions.PrintLine();
-        // Convert RGB to CMYK
+        ColorConsoleExtensions.PrintRandomColorLine();
+
+        // InitialConvert RGB to CMYK
         double r = red / 255.0;
         double g = green / 255.0;
         double b = blue / 255.0;
         Console.WriteLine($"Normalized RGB values - R: {r}, G: {g}, B: {b}");
-        ConsoleExtensions.PrintLine();
+        ColorConsoleExtensions.PrintRandomColorLine();
         double k = 1 - Math.Max(Math.Max(r, g), b);
         Console.WriteLine($"K (Black) value: {k}");
-        ConsoleExtensions.PrintLine();
+        ColorConsoleExtensions.PrintRandomColorLine();
         double c = (k == 1) ? 0 : (1 - r - k) / (1 - k);
         double m = (k == 1) ? 0 : (1 - g - k) / (1 - k);
         double y = (k == 1) ? 0 : (1 - b - k) / (1 - k);
         Console.WriteLine($"CMYK values before normalization - C: {c}, M: {m}, Y: {y}, K: {k}");
-        ConsoleExtensions.PrintLine();
-        // Convert 0-1 range to 0-100 range for percentages
+        ColorConsoleExtensions.PrintRandomColorLine();
+
+        // InitialConvert 0-1 range to 0-100 range for percentages
         c *= 100;
         m *= 100;
         y *= 100;
         k *= 100;
 
         Console.WriteLine($"CMYK values as percentages - C: {c}%, M: {m}%, Y: {y}%, K: {k}%");
-        ConsoleExtensions.PrintLine();
+        ColorConsoleExtensions.PrintRandomColorLine();
         return new Cmyk(c, m, y, k);
     }
 
@@ -104,7 +106,7 @@ internal class Hex : IValidatable
             value += digitValue * (int)Math.Pow(16, power);
         }
         Console.WriteLine($"Decimal value of hex pair '{hexPair}': {value}");
-        ConsoleExtensions.PrintLine();
+        ColorConsoleExtensions.PrintRandomColorLine();
         return value;
     }
 
