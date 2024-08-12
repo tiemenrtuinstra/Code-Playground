@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EggDropProblem", "Src\EggDropProblem\EggDropProblem.csproj", "{EA8BAFB2-45AF-4A2E-9747-F6FCC119B519}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerculationProblem", "Src\PerculationProblem\PerculationProblem.csproj", "{BCF4BCC1-5ADB-4E48-805F-ED9451B4044E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColorConverter", "Src\ColorConverter\ColorConverter.csproj", "{C0E7AA72-F15B-4E8D-950A-7A34361FC37B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA8BAFB2-45AF-4A2E-9747-F6FCC119B519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8BAFB2-45AF-4A2E-9747-F6FCC119B519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA8BAFB2-45AF-4A2E-9747-F6FCC119B519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8BAFB2-45AF-4A2E-9747-F6FCC119B519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCF4BCC1-5ADB-4E48-805F-ED9451B4044E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCF4BCC1-5ADB-4E48-805F-ED9451B4044E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCF4BCC1-5ADB-4E48-805F-ED9451B4044E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCF4BCC1-5ADB-4E48-805F-ED9451B4044E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E7AA72-F15B-4E8D-950A-7A34361FC37B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E7AA72-F15B-4E8D-950A-7A34361FC37B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E7AA72-F15B-4E8D-950A-7A34361FC37B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E7AA72-F15B-4E8D-950A-7A34361FC37B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A1C010B-E84E-4C76-890B-F3DEF2693942}
+	EndGlobalSection
+EndGlobal
