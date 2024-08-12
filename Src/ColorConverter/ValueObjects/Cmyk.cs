@@ -65,22 +65,22 @@ internal class Cmyk : IValidatable
         return value;
     }
 
-    internal Rgb ToRgb(Cmyk cmyk)
+    internal Rgb ToRgb()
     {
         Console.WriteLine($"Starting conversion from CMYK to RGB.");
-        Console.WriteLine($"Original CMYK values: {cmyk.ToString}");
+        Console.WriteLine($"Original CMYK values: {this.ToString()}");
 
         // Ensure CMYK values are in the range of 0 to 1
-        cmyk.Cyan /= 100.0;
-        cmyk.Magenta /= 100.0;
-        cmyk.Yellow /= 100.0;
-        cmyk.Key /= 100.0;
-        Console.WriteLine($"Normalized CMYK values: C={cmyk.Cyan}, M={cmyk.Magenta}, Y={cmyk.Yellow}, K={cmyk.Key}");
+        this.Cyan /= 100.0;
+        this.Magenta /= 100.0;
+        this.Yellow /= 100.0;
+        this.Key /= 100.0;
+        Console.WriteLine($"Normalized CMYK values: C={this.Cyan}, M={this.Magenta}, Y={this.Yellow}, K={this.Key}");
 
         // Convert CMYK to CMY
-        double cCmy = cmyk.Cyan * (1 - cmyk.Key) + cmyk.Key;
-        double mMgy = cmyk.Magenta * (1 - cmyk.Key) + cmyk.Key;
-        double yCmy = cmyk.Yellow * (1 - cmyk.Key) + cmyk.Key;
+        double cCmy = this.Cyan * (1 - this.Key) + this.Key;
+        double mMgy = this.Magenta * (1 - this.Key) + this.Key;
+        double yCmy = this.Yellow * (1 - this.Key) + this.Key;
         Console.WriteLine($"Converted to CMY: C={cCmy}, M={mMgy}, Y={yCmy}");
 
         // Convert CMY to RGB
@@ -99,12 +99,12 @@ internal class Cmyk : IValidatable
         return new Rgb(r, g, b);
     }
 
-    internal Hex ToHex(Cmyk cmyk)
+    internal Hex ToHex()
     {
         Console.WriteLine($"Starting conversion from CMYK to HEX.");
 
         Console.WriteLine($"Conver to RGB");
-        Rgb rgb = ToRgb(cmyk);
+        Rgb rgb = ToRgb();
         Console.WriteLine($"Converted to RGB: R={rgb.Red}, G={rgb.Green}, B={rgb.Blue}");
 
         Console.WriteLine($"Convert to HEX");

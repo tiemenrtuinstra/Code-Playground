@@ -61,6 +61,9 @@ internal class Rgb : IValidatable
 
     internal Cmyk ToCmyk()
     {
+        Console.WriteLine("Original RGB value");
+        Console.WriteLine(this);
+
         Console.WriteLine("Converting RGB to CMYK...");
 
         // Convert RGB to CMY

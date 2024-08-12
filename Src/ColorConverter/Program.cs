@@ -96,27 +96,27 @@ internal class Program
                 switch (selectedOption)
                 {
                     case ColorOption.HEX:
-                        TryPrintConversion(cmyk.ToHex, ConsoleExtensions.PrintHex, ColorOption.HEX);
+                        TryPrintConversion<Hex>(cmyk.ToHex, ConsoleExtensions.PrintHex, ColorOption.HEX);
                         break;
                     case ColorOption.RGB:
-                        TryPrintConversion(cmyk.ToRgb, ConsoleExtensions.PrintCmyk, ColorOption.RGB);
+                        TryPrintConversion<Rgb>(cmyk.ToRgb, ConsoleExtensions.PrintRgb, ColorOption.RGB);
                         break;
                     default:
                         Console.Error.WriteLine("Invalid option");
-                        ConvertRgb(); // Retry conversion
+                        ConvertCmyk(); // Retry conversion
                         break;
                 }
             }
             else
             {
                 Console.Error.WriteLine("Invalid enum value");
-                ConvertRgb(); // Retry conversion
+                ConvertCmyk(); // Retry conversion
             }
         }
         else
         {
             Console.Error.WriteLine("Invalid input");
-            ConvertRgb(); // Retry conversion
+            ConvertCmyk(); // Retry conversion
         }
     }
 
@@ -221,13 +221,12 @@ internal class Program
     }
 
     // Generic method to handle conversion and printing
-    internal static void TryPrintConversion<T>(Func<T>
-        conversionFunc, Action<T> printFunc, ColorOption conversionType) where T : IValidatable
+    internal static void TryPrintConversion<T>(Func<T> conversionFunc, Action<T> printFunc, ColorOption conversionType) where T : IValidatable
     {
         T result = conversionFunc();
         if (result.IsValid())
         {
-            Console.WriteLine($"This is the {conversionType} colour:");
+            Console.WriteLine($"This is the {conversionType} color:");
             printFunc(result);
         }
         else
@@ -235,6 +234,7 @@ internal class Program
             Console.Error.WriteLine($"Failed to convert to {conversionType}.");
         }
     }
+
 
     internal static void AnotherConversion()
     {
