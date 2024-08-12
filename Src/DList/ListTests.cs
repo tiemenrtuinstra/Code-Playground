@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace DList.Tests;
+namespace DList;
 
 public class ListTests
 {
@@ -45,7 +45,7 @@ public class ListTests
 
         Assert.Equal(vals.Length, list.Size());
 
-        for (int i = 0; i < vals.Length; i++)
+        for (var i = 0; i < vals.Length; i++)
         {
             var exp = vals[vals.Length - i - 1];
             var act = list.ValueAt(i);
@@ -83,7 +83,7 @@ public class ListTests
 
         Assert.Equal(vals.Length, list.Size());
 
-        for (int i = 0; i < vals.Length; i++)
+        for (var i = 0; i < vals.Length; i++)
         {
             var act = list.ValueAt(i);
             Assert.Equal(vals[i], act);
@@ -151,7 +151,7 @@ public class ListTests
         var list = new List<int>();
         list.PushAllBack(vals);
 
-        for (int i = 0; i < vals.Length; i++)
+        for (var i = 0; i < vals.Length; i++)
         {
             var act = list.ValueAt(i);
             Assert.Equal(vals[i], act);
@@ -169,7 +169,7 @@ public class ListTests
 
         Assert.Equal(9999, list.ValueAt(0));
 
-        for (int i = 0; i < vals.Length; i++)
+        for (var i = 0; i < vals.Length; i++)
         {
             var act = list.ValueAt(i + 1);
             Assert.Equal(vals[i], act);
@@ -201,7 +201,7 @@ public class ListTests
         list.PushAllBack(vals);
 
         var iter = list.Iterator();
-        int i = 0;
+        var i = 0;
 
         while (iter.HasNext())
         {
@@ -222,7 +222,7 @@ public class ListTests
         list.PushAllFront(vals);
 
         var iter = list.ReverseIterator();
-        int i = 0;
+        var i = 0;
 
         while (iter.HasNext())
         {
