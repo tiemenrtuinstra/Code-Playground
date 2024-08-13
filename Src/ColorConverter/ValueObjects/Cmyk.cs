@@ -17,12 +17,13 @@ internal class Cmyk : ColorBase
     public double Yellow { get; set; } // Changed to public
     public double Key { get; set; } // Changed to public
 
-    public Cmyk(double cyan, double magenta, double yellow, double key) // Constructor made public
+    public Cmyk(double cyan, double magenta, double yellow, double key, bool displayConsole = true) // Constructor made public
     {
         Cyan = cyan;
         Magenta = magenta;
         Yellow = yellow;
         Key = key;
+        DisplayConsole = displayConsole;
     }
 
     public override string ToString() => $"Cyan: {Cyan}, Magenta: {Magenta}, Yellow: {Yellow}, Key (Black): {Key}";
@@ -118,5 +119,32 @@ internal class Cmyk : ColorBase
             throw new ArgumentException("Invalid HEX value.");
         }
         return hex;
+    }
+
+    public static void PrintColorGrid(int step = 10)
+    {
+        for (int c = 0; c <= 100; c += step)
+        {
+            for (int m = 0; m <= 100; m += step)
+            {
+                for (int y = 0; y <= 100; y += step)
+                {
+                    for (int k = 0; k <= 100; k += step)
+                    {
+                        TableCell(c, m, y, k);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void TableCell(int c, int m, int y,int k)
+    {
+        Cmyk cmyk = new(c, m, y, k);
+        var rgb = cmyk.ToRgb();
+        ColorConsoleExtensions.SetBackgroundColor(rgb.Red, rgb.Green, rgb.Blue);
+        Console.Write($" {c:D3},{m:D3},{y:D3},{k:D3} ");
+        Console.ResetColor();
+        Console.Write(" ");
     }
 }

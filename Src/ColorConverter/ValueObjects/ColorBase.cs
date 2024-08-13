@@ -1,8 +1,10 @@
-﻿namespace ColorConverter.ValueObjects
+﻿namespace ColorConverter.ValueObjects;
+
+public abstract class ColorBase : IColor
 {
-    public abstract class ColorBase : IColor
-    {
-        public abstract bool IsValid();
-        public override abstract string ToString();
-    }
+    internal bool DisplayConsole { get; set; }
+
+    public abstract bool IsValid();
+    public override abstract string ToString();
+    public bool HasConsole() => DisplayConsole;
 }

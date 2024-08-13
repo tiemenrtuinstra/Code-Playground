@@ -6,9 +6,10 @@ internal class Hex : ColorBase
 {
     internal string Value { get; set; }
 
-    internal Hex(string value)
+    internal Hex(string value, bool displayConsole = true)
     {
         Value = value;
+        DisplayConsole = displayConsole;
     }
 
     public override string ToString()
@@ -44,7 +45,8 @@ internal class Hex : ColorBase
 
     internal Rgb ToRgb()
     {
-        Console.WriteLine("Starting HEX to RGB conversion...");
+        if (HasConsole()) Console.WriteLine("Starting HEX to RGB conversion...");
+
         int red = HexPairToDecimal(Value.Substring(0, 2));
         int green = HexPairToDecimal(Value.Substring(2, 2));
         int blue = HexPairToDecimal(Value.Substring(4, 2));
@@ -95,42 +97,98 @@ internal class Hex : ColorBase
 
     private int HexPairToDecimal(string hexPair)
     {
-        Console.WriteLine($"Converting hex pair '{hexPair}' to decimal...");
+        if (HasConsole()) Console.WriteLine($"Converting hex pair '{hexPair}' to decimal...");
 
         int value = 0;
         for (int i = 0; i < hexPair.Length; i++)
         {
             int digitValue = HexDigitToDecimal(hexPair[i]);
             int power = hexPair.Length - i - 1;
-            Console.WriteLine($"Hex digit '{hexPair[i]}' to decimal: {digitValue}, multiplied by 16^{power}");
+            if (HasConsole()) Console.WriteLine($"Hex digit '{hexPair[i]}' to decimal: {digitValue}, multiplied by 16^{power}");
             value += digitValue * (int)Math.Pow(16, power);
         }
-        Console.WriteLine($"Decimal value of hex pair '{hexPair}': {value}");
-        ColorConsoleExtensions.PrintRandomColorLine();
+        if(HasConsole()) Console.WriteLine($"Decimal value of hex pair '{hexPair}': {value}");
+
+        if (HasConsole()) ColorConsoleExtensions.PrintRandomColorLine();
+
         return value;
     }
 
     private int HexDigitToDecimal(char hexDigit)
     {
-        Console.WriteLine($"Converting hex digit '{hexDigit}' to decimal...");
+        if (HasConsole()) Console.WriteLine($"Converting hex digit '{hexDigit}' to decimal...");
+
         if (hexDigit >= '0' && hexDigit <= '9')
         {
             int value = hexDigit - '0';
-            Console.WriteLine($"Decimal value: {value}");
+            if (HasConsole()) Console.WriteLine($"Decimal value: {value}");
             return value;
         }
         else if (hexDigit >= 'A' && hexDigit <= 'F')
         {
             int value = 10 + (hexDigit - 'A');
-            Console.WriteLine($"Decimal value: {value}");
+            if (HasConsole()) Console.WriteLine($"Decimal value: {value}");
             return value;
         }
         else if (hexDigit >= 'a' && hexDigit <= 'f')
         {
             int value = 10 + (hexDigit - 'a');
-            Console.WriteLine($"Decimal value: {value}");
+            if (HasConsole()) Console.WriteLine($"Decimal value: {value}");
             return value;
         }
         throw new ArgumentException($"Invalid hex digit '{hexDigit}'");
+    }
+
+    public static void PrintColorGrid(int step = 10)
+    {
+        List<Cell> grid = new List<Cell>();
+        for (int r = 0; r < 256; r += step)
+        {
+            grid.Add(new Cell(r, 0, 0));
+            for (int g = 0; g < 256; g += step)
+            {
+                grid.Add(new Cell(r, g, 0));
+                for (int b = 0; b < 256; b += step)
+                {
+                    grid.Add(new Cell(r, g, b));
+                }
+            }
+        }
+
+        int cellsPerRow = 256 / step;
+        for (int i = 0; i < grid.Count; i++)
+        {
+            TableCell(grid[i].R, grid[i].G, grid[i].B);
+            if ((i + 1) % cellsPerRow == 0)
+            {
+                Console.WriteLine();
+            }
+        }
+    }
+
+    private static void TableCell(int r, int g, int b)
+    {
+        var rgb = new Rgb(r, g, b);
+        var hex = rgb.ToHex();
+        hex.DisplayConsole = false;
+
+        ColorConsoleExtensions.SetBackgroundColor(rgb.Red, rgb.Green, rgb.Blue);
+        Console.Write($" {hex.Value} ");
+        Console.ResetColor();
+    }
+
+}
+
+public class Cell
+{
+    public int R { get; }
+    public int G { get; }
+    public int B { get; }
+
+    public Cell(int r, int g, int b)
+    {
+        R = r;
+        G = g;
+        B = b;
     }
 }

@@ -1,12 +1,14 @@
-﻿using ColorConverter.ValueObjects;
+﻿using ColorConverter.Enums;
+using ColorConverter.ValueObjects;
 using Common.Enums;
 using Common.Extensions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ColorConverter.Extensions
 {
     public static class ColorConsoleExtensions
     {
-        private static readonly BaseConsoleExtensions baseConsoleExtensions = new BaseConsoleExtensionsImpl();
+        private static readonly ABaseConsoleExtensions baseConsoleExtensions = new BaseConsoleExtensions();
 
         public static void PrintColorLine(int red, int green, int blue)
         {
@@ -148,7 +150,15 @@ namespace ColorConverter.Extensions
             Console.Title = appTitle;
             PrintRandomColor(baseConsoleExtensions.SetCenteredText(appConsoleTitle), true, false);
             PrintRandomColor(baseConsoleExtensions.SetCenteredText(appDescription), true, false);
+
+            Console.WriteLine();
+            PrintCustomRandomColorLine(0, LineType.Solid, 1);
+            Console.WriteLine();
         }
 
+        public static char GetColorOptionInputWithPrompt(this string promptMessage) =>
+            ConsoleExtensions.GetInputWithPrompt(promptMessage, Enum.GetValues(typeof(ColorOption))
+                                   .Cast<ColorOption>()
+                                   .ToDictionary(e => (int)e, e => e.ToString()));
     }
 }

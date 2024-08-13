@@ -15,11 +15,12 @@ internal class Rgb : ColorBase
     internal int Green { get; set; }
     internal int Blue { get; set; }
 
-    internal Rgb(int red, int green, int blue)
+    internal Rgb(int red, int green, int blue, bool displayConsole = true)
     {
         Red = red;
         Green = green;
         Blue = blue;
+        DisplayConsole = displayConsole;
     }
 
     public override string ToString() => $"Red: {Red}, Green: {Green}, Blue: {Blue}";
@@ -138,5 +139,28 @@ internal class Rgb : ColorBase
         char lowChar = hexDigits[lowDigit];
 
         return $"{highChar}{lowChar}";
+    }
+
+    public static void PrintColorGrid(int step = 5)
+    {
+
+        for (int r = 0; r < 256; r += step)
+        {
+            for (int g = 0; g < 256; g += step)
+            {
+                for (int b = 0; b < 256; b += step)
+                {
+                    TableCell(r, g, b);
+                }
+            }
+        }
+    }
+
+    private static void TableCell(int r, int g, int b)
+    {
+        ColorConsoleExtensions.SetBackgroundColor(r, g, b);
+        Console.Write($" {r:D3},{g:D3},{b:D3} ");
+        Console.ResetColor();
+        Console.Write(" ");
     }
 }

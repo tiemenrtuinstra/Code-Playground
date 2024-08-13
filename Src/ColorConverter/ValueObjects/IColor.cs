@@ -4,4 +4,5 @@ public interface IColor : IValidatable
 {
     string ToString();
     bool IsValid();
+    bool HasConsole();
 }

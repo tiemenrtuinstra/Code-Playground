@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Common.Extensions;
 
-public abstract class BaseConsoleExtensions : IConsoleExtensions
+public abstract class ABaseConsoleExtensions : IConsoleExtensions
 {
     public void PrintLine() => Console.WriteLine(CustomLine());
 
@@ -66,7 +66,7 @@ public abstract class BaseConsoleExtensions : IConsoleExtensions
     }
 }
 
-public class BaseConsoleExtensionsImpl : BaseConsoleExtensions
+public class BaseConsoleExtensions : ABaseConsoleExtensions
 {
 
 }

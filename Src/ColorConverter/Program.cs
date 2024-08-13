@@ -10,8 +10,8 @@ internal class Program
 {
     private static ColorOption chosenFromColor;
     private static ColorOption chosenToColor;
-    private static IValidatable currentColor;
-    private static readonly string appTitle = "Colou Converter";
+    private static IValidatable? currentColor;
+    private static readonly string appTitle = "Colour Converter";
     private static readonly string appConsoleTitle = "\r\n ██████╗ ██████╗ ██╗      ██████╗ ██╗   ██╗██████╗      ██████╗ ██████╗ ███╗   ██╗██╗   ██╗███████╗██████╗ ████████╗███████╗██████╗ \r\n██╔════╝██╔═══██╗██║     ██╔═══██╗██║   ██║██╔══██╗    ██╔════╝██╔═══██╗████╗  ██║██║   ██║██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗\r\n██║     ██║   ██║██║     ██║   ██║██║   ██║██████╔╝    ██║     ██║   ██║██╔██╗ ██║██║   ██║█████╗  ██████╔╝   ██║   █████╗  ██████╔╝\r\n██║     ██║   ██║██║     ██║   ██║██║   ██║██╔══██╗    ██║     ██║   ██║██║╚██╗██║╚██╗ ██╔╝██╔══╝  ██╔══██╗   ██║   ██╔══╝  ██╔══██╗\r\n╚██████╗╚██████╔╝███████╗╚██████╔╝╚██████╔╝██║  ██║    ╚██████╗╚██████╔╝██║ ╚████║ ╚████╔╝ ███████╗██║  ██║   ██║   ███████╗██║  ██║\r\n ╚═════╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝\r\n                                                                                                                                    \r\n";
     private static readonly string appDescription = "This program converts colors between HEX, RGB, and CMYK formats.";
 
@@ -19,9 +19,39 @@ internal class Program
     {
         try
         {
-            ColorConsoleExtensions.StartProgram(appTitle,appConsoleTitle, appDescription);
+            ColorConsoleExtensions.StartProgram(appTitle, appConsoleTitle, appDescription);
 
-            InitialConvert();
+            while (true)
+            {
+                var mainOptions = new Dictionary<int, string>
+        {
+            { 1, "Convert" },
+            { 2, "Color tables" }
+        };
+                char inputChar = "Do you want to convert or show color tables: ".GetInputWithPrompt(mainOptions);
+                ColorConsoleExtensions.PrintRandomColorLine();
+
+                if (int.TryParse(inputChar.ToString(), out int inputNumber))
+                {
+                    switch (inputNumber)
+                    {
+                        case 1:
+                            InitialConvert();
+                            break;
+                        case 2:
+                            InitialColorTable();
+                            break;
+                        default:
+                            Console.Error.WriteLine("Invalid input");
+                            continue;
+                    }
+                    break;
+                }
+                else
+                {
+                    Console.Error.WriteLine("Invalid input");
+                }
+            }
 
             ConsoleExtensions.EndProgram();
         }
@@ -31,19 +61,51 @@ internal class Program
         }
     }
 
+    internal static void InitialColorTable()
+    {
+        while (true)
+        {
+            char inputChar = "Show colour table for: ".GetColorOptionInputWithPrompt();
+            ColorConsoleExtensions.PrintRandomColorLine();
+
+            if (int.TryParse(inputChar.ToString(), out int inputColor) && Enum.IsDefined(typeof(ColorOption), inputColor))
+            {
+                switch ((ColorOption)inputColor)
+                {
+                    case ColorOption.HEX:
+                        Hex.PrintColorGrid();
+                        break;
+                    case ColorOption.RGB:
+                        Rgb.PrintColorGrid();
+                        break;
+                    case ColorOption.CMYK:
+                        Cmyk.PrintColorGrid();
+                        break;
+                    default:
+                        Console.Error.WriteLine("Invalid input");
+                        continue;
+                }
+                break; // Exit the loop if a valid option is chosen
+            }
+            else
+            {
+                Console.Error.WriteLine("Invalid input");
+            }
+        }
+        AnotherColorTable();
+    }
+
 
     internal static void InitialConvert()
     {
         Console.WriteLine(); // Move to the next line
 
-        Console.Write("What type do you want to convert: (1) HEX, (2) RGB, (3) CMYK ");
-        char inputChar = Console.ReadKey().KeyChar;
-        Console.WriteLine();
+        char inputChar = "What type do you want to convert: ".GetColorOptionInputWithPrompt();
         ColorConsoleExtensions.PrintRandomColorLine();
 
-        if (int.TryParse(inputChar.ToString(), out int inputNumber) && Enum.IsDefined(typeof(ColorOption), inputNumber))
+        if (int.TryParse(inputChar.ToString(), out int inputColor) && Enum.IsDefined(typeof(ColorOption), inputColor))
         {
-            chosenFromColor = (ColorOption)inputNumber;
+            chosenFromColor = (ColorOption)inputColor;
             currentColor = null; // Reset current color
             Convert();
         }
@@ -104,11 +166,10 @@ internal class Program
             }
         }
 
-        Console.Write($"Convert {typeof(T).Name} to: {string.Join(", ", conversionOptions.Keys.Select(k => $"({(int)k}) {k}"))}");
+        var options = conversionOptions.ToDictionary(kvp => (int)kvp.Key, kvp => kvp.Key.ToString());
+        char inputChar = $"Convert {typeof(T).Name} to: ".GetInputWithPrompt(options);
         ColorConsoleExtensions.PrintRandomColorLine();
 
-        char inputChar = Console.ReadKey().KeyChar;
-        Console.WriteLine();
         if (int.TryParse(inputChar.ToString(), out int inputNumber) && conversionOptions.ContainsKey((ColorOption)inputNumber))
         {
             chosenToColor = (ColorOption)inputNumber;
@@ -122,6 +183,7 @@ internal class Program
 
         AnotherConversion();
     }
+
 
     // Generic method to handle conversion and printing
     internal static void TryPrintConversion<T>(Func<T> conversionFunc, ColorOption conversionType) where T : IValidatable
@@ -140,17 +202,19 @@ internal class Program
 
     internal static void AnotherConversion()
     {
-        Console.Write("Do you want to convert the color to another format? (Y/N) ");
-        if (char.ToLower(Console.ReadKey().KeyChar) == 'y')
+        char inputChar = "Do you want to convert the color to another format? ".GetInputWithYesNoPrompt();
+        ColorConsoleExtensions.PrintRandomColorLine();
+        if (char.ToLower(inputChar) == 'y')
         {
-            Console.WriteLine();
             Convert();
         }
         else
         {
             Console.WriteLine();
-            Console.Write("Do you want to do another conversion? (Y/N) ");
-            if (char.ToLower(Console.ReadKey().KeyChar) == 'y')
+            inputChar = "Do you want to do another conversion? ".GetInputWithYesNoPrompt();
+            ColorConsoleExtensions.PrintRandomColorLine();
+
+            if (char.ToLower(inputChar) == 'y')
             {
                 Console.WriteLine();
                 InitialConvert();
@@ -159,6 +223,20 @@ internal class Program
             {
                 ConsoleExtensions.EndProgram();
             }
+        }
+    }
+
+    internal static void AnotherColorTable()
+    {
+        char inputChar = "Do you want to show another color table? ".GetInputWithYesNoPrompt();
+        ColorConsoleExtensions.PrintRandomColorLine();
+        if (char.ToLower(inputChar) == 'y')
+        {
+            InitialColorTable();
+        }
+        else
+        {
+            ConsoleExtensions.EndProgram();
         }
     }
 }
