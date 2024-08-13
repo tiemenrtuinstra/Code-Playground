@@ -1,4 +1,5 @@
 ﻿using ColorConverter.Extensions;
+using Common;
 
 namespace ColorConverter.ValueObjects;
 
@@ -24,6 +25,16 @@ internal class Rgb : ColorBase
     }
 
     public override string ToString() => $"Red: {Red}, Green: {Green}, Blue: {Blue}";
+
+    public static Rgb FromString(string rgb)
+    {
+        string[] values = rgb.Split(',');
+        int r = int.Parse(values[0].Substring(5));
+        int g = int.Parse(values[1].Substring(7));
+        int b = int.Parse(values[2].Substring(6));
+
+        return new Rgb(r, g, b);
+    }
 
     public override bool IsValid()
     {
@@ -143,23 +154,38 @@ internal class Rgb : ColorBase
 
     public static void PrintColorGrid(int step = 5)
     {
+        Grid grid = new Grid(51, 3);
 
+        int row = 0;
         for (int r = 0; r < 256; r += step)
         {
+            grid[row, 0] = new Rgb(r, 0, 0).ToString();
             for (int g = 0; g < 256; g += step)
             {
+                grid[row, 1] = new Rgb(r, g, 0).ToString();
                 for (int b = 0; b < 256; b += step)
                 {
-                    TableCell(r, g, b);
+                    grid[row, 2] = new Rgb(r, g, b).ToString();
                 }
             }
+            row++;
+        }
+
+        for (int i = 0; i < 56; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                TableCell(grid[i, j] + "\t");
+            }
+            Console.WriteLine();
         }
     }
 
-    private static void TableCell(int r, int g, int b)
+    private static void TableCell(string value)
     {
-        ColorConsoleExtensions.SetBackgroundColor(r, g, b);
-        Console.Write($" {r:D3},{g:D3},{b:D3} ");
+        Rgb rgb = FromString(value);
+        ColorConsoleExtensions.SetBackgroundColor(rgb.Red, rgb.Green, rgb.Green);
+        Console.Write($" {rgb.Red:D3},{rgb.Green:D3},{rgb.Green:D3} ");
         Console.ResetColor();
         Console.Write(" ");
     }
