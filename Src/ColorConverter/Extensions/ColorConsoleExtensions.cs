@@ -2,7 +2,6 @@
 using ColorConverter.ValueObjects;
 using Common.Enums;
 using Common.Extensions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ColorConverter.Extensions
 {
